@@ -34,10 +34,10 @@ export const HeroSection = () => (
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
+            <Button size="sm" className="bg-purple-600 hover:bg-purple-700">
               Join Beta Program
             </Button>
-            <Button size="lg" variant="secondary">
+            <Button size="sm" variant="secondary">
               Watch Demo
             </Button>
           </motion.div>

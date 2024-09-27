@@ -14,7 +14,7 @@ export const Footer = () => (
           priority
         />
         <p className="text-gray-400 mt-4">
-          Revolutionizing event ticketing and cashless payments.
+          Tick8 Plus is a product of BITS, revolutionizing event ticketing and cashless payments.
         </p>
       </div>
       <div>
@@ -41,12 +41,12 @@ export const Footer = () => (
         <h3 className="text-lg font-bold mb-4">Legal</h3>
         <ul className="space-y-2">
           <li>
-            <a href="#" className="text-gray-400 hover:text-white">
+            <a href="/privacy-policy" className="text-gray-400 hover:text-white">
               Privacy Policy
             </a>
           </li>
           <li>
-            <a href="#" className="text-gray-400 hover:text-white">
+            <a href="/terms" className="text-gray-400 hover:text-white">
               Terms of Service
             </a>
           </li>
@@ -103,7 +103,7 @@ export const Footer = () => (
       </div>
     </div>
     <div className="mt-8 text-center text-gray-400">
-      &copy; 2024 Tick8 Plus. All rights reserved.
+      &copy; 2024 Tick8 Plus, a product of BITS. All rights reserved.
     </div>
   </footer>
 );
