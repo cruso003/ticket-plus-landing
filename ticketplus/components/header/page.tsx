@@ -9,7 +9,7 @@ export const Header = () => (
           className="dark:invert"
           src="/images/tplogo.png"
           alt="Tick8 Plus Logo"
-          width={180}
+          width={150}
           height={38}
           priority
         />
@@ -20,7 +20,7 @@ export const Header = () => (
             </a>
           ))}
         </nav>
-        <Link href="/beta-program">
+        <Link href="#beta-program">
         <Button className="bg-purple-600 hover:bg-purple-700">Sign Up for Beta</Button>
         </Link>
         
