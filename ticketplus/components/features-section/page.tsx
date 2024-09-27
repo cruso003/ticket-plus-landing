@@ -20,7 +20,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon: Icon, title, descriptio
   );
   
   const FeaturesSection = () => (
-    <section className="py-20 px-4 bg-gradient-to-br from-purple-900 via-black to-pink-900">
+    <section id="features" className="py-20 px-4 bg-gradient-to-br from-purple-900 via-black to-pink-900">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-4xl font-bold mb-12 text-center bg-gradient-to-br from-purple-900 via-black to-pink-900 text-white">Features Showcase</h2>
         <Tabs defaultValue="attendees">

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 
 export const HeroSection = () => (
-  <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-black to-pink-900 pt-16 px-4">
+  <section id="home" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-black to-pink-900 pt-16 px-4">
     <AnimatePresence>
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center">
         <div className="md:w-1/2 text-center md:text-left mb-8 md:mb-0">
