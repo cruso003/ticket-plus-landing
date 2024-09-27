@@ -37,7 +37,7 @@ export const HeroSection = () => (
             <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
               Join Beta Program
             </Button>
-            <Button size="lg" variant="outline">
+            <Button size="lg" variant="secondary">
               Watch Demo
             </Button>
           </motion.div>
