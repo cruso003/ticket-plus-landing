@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Wallet, Smartphone, Shield, Globe } from 'lucide-react';
+import { Wallet, Smartphone, Shield, Globe, BarChart, CheckCircle, Users, ArrowRight } from 'lucide-react';
 
 // Define the props interface
 interface ValuePropProps {
@@ -48,6 +48,26 @@ const ValuePropositionSection = () => (
           icon={Wallet}
           title="Innovation"
           description="NFC band technology for seamless in-event purchases"
+        />
+        <ValueProp 
+          icon={BarChart}
+          title="Analytics"
+          description="Real-time insights to track event performance"
+        />
+        <ValueProp 
+          icon={CheckCircle}
+          title="Convenience"
+          description="Easily manage tickets and payments in one app"
+        />
+        <ValueProp 
+          icon={Users}
+          title="Community"
+          description="Discover and attend events tailored to your interests"
+        />
+        <ValueProp 
+          icon={ArrowRight}
+          title="Support"
+          description="24/7 customer support to assist with any issues"
         />
       </div>
     </div>
