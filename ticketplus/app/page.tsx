@@ -10,14 +10,14 @@ import { HowItWorksSection } from "@/components/why-section/page";
 export default function Home() {
   return (
     <>
-    <Header />
-    <HeroSection />
-    <ValuePropositionSection />
-    <HowItWorksSection />
-    <FeaturesSection />
-    <FAQSection />
-    <BetaProgramSection />
-    <Footer />
+      <Header />
+      <HeroSection />
+      <ValuePropositionSection />
+      <HowItWorksSection />
+      <FeaturesSection />
+      <FAQSection />
+      <BetaProgramSection />
+      <Footer />
     </>
   );
 }
