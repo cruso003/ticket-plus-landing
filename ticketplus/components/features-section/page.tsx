@@ -13,7 +13,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon: Icon, title, descriptio
   <Card className="bg-gray-800">
     <CardContent className="p-6">
       <Icon className="w-12 h-12 mb-4 text-purple-500" />
-      <h3 className="text-xl font-bold mb-2">{title}</h3>
+      <h3 className="text-xl font-bold mb-2 text-red-50">{title}</h3>
       <p className="text-gray-400">{description}</p>
     </CardContent>
   </Card>
