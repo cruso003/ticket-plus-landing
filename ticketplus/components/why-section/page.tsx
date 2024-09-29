@@ -23,7 +23,7 @@ export const HowItWorksSection = () => (
             </div>
             <div className="bg-gray-800 rounded-lg">
               <Image
-                className="dark:invert object-contain"
+                className="dark:invert object-contain rounded"
                 src="/images/image2.png"
                 alt="Attendee Process Mockup"
                 width={1000}
@@ -44,7 +44,7 @@ export const HowItWorksSection = () => (
               </ol>
             </div>
             <div className="bg-gray-800 rounded-lg">
-            <Image
+              <Image
                 className="dark:invert object-contain"
                 src="/images/image3.png"
                 alt="Organizer Process Mockup"

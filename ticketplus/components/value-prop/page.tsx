@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Wallet, Smartphone, Shield, Globe, BarChart, CheckCircle, Users, ArrowRight } from 'lucide-react';
+import { Wallet, Smartphone, Shield, Globe, BarChart, CheckCircle, Users, Headset } from 'lucide-react';
 
 // Define the props interface
 interface ValuePropProps {
@@ -12,7 +12,7 @@ interface ValuePropProps {
 
 const ValueProp: React.FC<ValuePropProps> = ({ icon: Icon, title, description }) => (
   <AnimatePresence>
-    <motion.div 
+    <motion.div
       className="flex flex-col items-center text-center"
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
@@ -29,43 +29,43 @@ const ValuePropositionSection = () => (
     <div className="max-w-7xl mx-auto">
       <h2 className="text-4xl font-bold mb-12 text-center text-white">Why Choose Tick8 Plus?</h2>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <ValueProp 
+        <ValueProp
           icon={Globe}
           title="Accessibility"
           description="Purchase tickets anytime, anywhere"
         />
-        <ValueProp 
+        <ValueProp
           icon={Shield}
           title="Security"
           description="Cashless transactions for safer events"
         />
-        <ValueProp 
+        <ValueProp
           icon={Smartphone}
           title="Efficiency"
           description="Streamlined process for attendees and organizers"
         />
-        <ValueProp 
+        <ValueProp
           icon={Wallet}
           title="Innovation"
           description="NFC band technology for seamless in-event purchases"
         />
-        <ValueProp 
+        <ValueProp
           icon={BarChart}
           title="Analytics"
           description="Real-time insights to track event performance"
         />
-        <ValueProp 
+        <ValueProp
           icon={CheckCircle}
           title="Convenience"
           description="Easily manage tickets and payments in one app"
         />
-        <ValueProp 
+        <ValueProp
           icon={Users}
           title="Community"
           description="Discover and attend events tailored to your interests"
         />
-        <ValueProp 
-          icon={ArrowRight}
+        <ValueProp
+          icon={Headset}
           title="Support"
           description="24/7 customer support to assist with any issues"
         />
