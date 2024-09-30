@@ -2,6 +2,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from 'next/link';
 
 export const HeroSection = () => (
   <section
@@ -34,9 +35,11 @@ export const HeroSection = () => (
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            <Button size="sm" className="bg-purple-600 hover:bg-purple-700">
-              Join Beta Program
-            </Button>
+            <Link href="#beta-program">
+              <Button size="sm" className="bg-purple-600 hover:bg-purple-700">
+                Join Beta Program
+              </Button>
+            </Link>
             <Button size="sm" variant="secondary">
               Watch Demo
             </Button>
