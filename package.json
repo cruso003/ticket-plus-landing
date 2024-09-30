@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "mongodb": "^6.9.0",
-    "react-activity": "^2.1.3"
-  }
-}
