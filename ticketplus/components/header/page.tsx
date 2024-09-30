@@ -14,7 +14,7 @@ export const Header = () => (
         priority
       />
       <nav className="hidden md:flex space-x-6">
-        {['Home', 'Overview', 'Features', 'Beta Program', 'Download App', 'Contact'].map((item) => (
+        {['Home', 'Features', 'Beta Program', 'Download App', 'Contact'].map((item) => (
           <a key={item} href={`#${item.toLowerCase().replace(' ', '-')}`} className="text-white hover:text-purple-400 transition-colors">
             {item}
           </a>
