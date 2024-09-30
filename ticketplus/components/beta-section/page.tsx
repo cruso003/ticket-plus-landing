@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { CheckCircle2, ChevronRight, Dot } from 'lucide-react';
+import { CheckCircle2, ChevronRight } from 'lucide-react';
 import { Dots } from "react-activity";
 import "react-activity/dist/library.css";
 
