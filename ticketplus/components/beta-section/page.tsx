@@ -23,6 +23,7 @@ export const BetaProgramSection: React.FC = () => {
   const [feedback, setFeedback] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [currentStep, setCurrentStep] = useState<Step>('signup');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -34,13 +35,36 @@ export const BetaProgramSection: React.FC = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+
+
   };
 
-  const handleSignUp = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validateForm()) {
-      setCurrentStep('download');
+
+      try {
+        const response = await fetch('/api/testersignup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name, email, role }),
+        });
+
+        if (!response.ok) {
+          setErrorMessage('Failed to register for feedback');
+          return
+        }
+        setErrorMessage("")
+        setCurrentStep('download');
+      } catch (error) {
+        console.error('Error submitting feedback:', error);
+        setErrorMessage('Failed to register for feedback please try again later');
+        throw new Error("Failed to register for feedback please try again later")
+      }
     }
+
   };
 
   const handleDownload = () => {
@@ -50,12 +74,32 @@ export const BetaProgramSection: React.FC = () => {
     }
   };
 
-  const handleFeedback = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFeedback = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (feedback.trim()) {
+    if (feedback) {
       // Here you would typically send the feedback to your server
-      console.log('Feedback submitted:', feedback);
-      setCurrentStep('complete');
+      try {
+        const response = await fetch('/api/feedback', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ feedback }),
+        });
+
+        if (!response.ok) {
+          setErrorMessage('Failed to send feedback');
+          return
+        }
+        setErrorMessage("")
+        setCurrentStep('complete');
+        console.log('Feedback submitted:', feedback);
+      } catch (error) {
+        console.error('Error submitting feedback:', error);
+        setErrorMessage('Failed to send feeback Please try again');
+        throw new Error("Failed to send feeback Please try again")
+      }
+
     } else {
       setErrors({ feedback: 'Please provide some feedback' });
     }
@@ -65,68 +109,78 @@ export const BetaProgramSection: React.FC = () => {
     switch (currentStep) {
       case 'signup':
         return (
-          <form onSubmit={handleSignUp} className="space-y-4">
-            <div className="flex flex-col md:flex-row gap-4 justify-center">
-              <div className="flex-1">
-                <Label htmlFor="name" className="sr-only">Name</Label>
-                <Input 
-                  id="name"
-                  type="text" 
-                  placeholder="Name" 
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className={cn(
-                    "bg-white/20 border-none text-white placeholder:text-gray-300",
-                    errors.name && "border-red-500 focus-visible:ring-red-500"
-                  )}
-                />
-                {errors.name && <p className="text-red-500 text-sm mt-1 text-left">{errors.name}</p>}
+          <>
+            {errorMessage && (
+              <div className='p-2 rounded bg-black flex items-center justify-center mb-3'>
+                <h3 className='text-red-700'>{errorMessage} !!</h3>
               </div>
-              <div className="flex-1">
-                <Label htmlFor="email" className="sr-only">Email</Label>
-                <Input 
-                  id="email"
-                  type="email" 
-                  placeholder="Email" 
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className={cn(
-                    "bg-white/20 border-none text-white placeholder:text-gray-300",
-                    errors.email && "border-red-500 focus-visible:ring-red-500"
-                  )}
-                />
-                {errors.email && <p className="text-red-500 text-sm mt-1 text-left">{errors.email}</p>}
+            )
+            }
+            <form onSubmit={handleSignUp} className="space-y-4">
+              <div className="flex flex-col md:flex-row gap-4 justify-center">
+                <div className="flex-1">
+                  <Label htmlFor="name" className="sr-only">Name</Label>
+                  <Input
+                    id="name"
+                    type="text"
+                    placeholder="Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className={cn(
+                      "bg-white/20 border-none text-white placeholder:text-gray-300",
+                      errors.name && "border-red-500 focus-visible:ring-red-500"
+                    )}
+                  />
+                  {errors.name && <p className="text-red-500 text-sm mt-1 text-left">{errors.name}</p>}
+                </div>
+                <div className="flex-1">
+                  <Label htmlFor="email" className="sr-only">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className={cn(
+                      "bg-white/20 border-none text-white placeholder:text-gray-300",
+                      errors.email && "border-red-500 focus-visible:ring-red-500"
+                    )}
+                  />
+                  {errors.email && <p className="text-red-500 text-sm mt-1 text-left">{errors.email}</p>}
+                </div>
               </div>
-            </div>
-            <div className="flex flex-col md:flex-row gap-4 justify-center items-start">
-              <div className="flex-1">
-                <Label htmlFor="role-select" className="sr-only">Select Role</Label>
-                <Select value={role} onValueChange={(value: Role) => setRole(value)}>
-                  <SelectTrigger className={cn(
-                    "bg-white/20 border-none text-white",
-                    errors.role && "border-red-500 focus-visible:ring-red-500"
-                  )}>
-                    <SelectValue placeholder="Select Role" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="attendee">Attendee</SelectItem>
-                    <SelectItem value="organizer">Organizer</SelectItem>
-                  </SelectContent>
-                </Select>
-                {errors.role && <p className="text-red-500 text-sm mt-1 text-left">{errors.role}</p>}
+              <div className="flex flex-col md:flex-row gap-4 justify-center items-start">
+                <div className="flex-1">
+                  <Label htmlFor="role-select" className="sr-only">Select Role</Label>
+                  <Select value={role} onValueChange={(value: Role) => setRole(value)}>
+                    <SelectTrigger className={cn(
+                      "bg-white/20 border-none text-white",
+                      errors.role && "border-red-500 focus-visible:ring-red-500"
+                    )}>
+                      <SelectValue placeholder="Select Role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="attendee">Attendee</SelectItem>
+                      <SelectItem value="organizer">Organizer</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {errors.role && <p className="text-red-500 text-sm mt-1 text-left">{errors.role}</p>}
+                </div>
+                <div className="flex-1">
+                  <Button type="submit" size="lg" className="w-full bg-white text-purple-800 hover:bg-gray-100">
+                    Sign Up for Beta <ChevronRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
               </div>
-              <div className="flex-1">
-                <Button type="submit" size="lg" className="w-full bg-white text-purple-800 hover:bg-gray-100">
-                  Sign Up for Beta <ChevronRight className="ml-2 h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </form>
+            </form>
+          </>
+
         );
       case 'download':
         return (
           <div className="text-center">
             <p className="mb-4">Great! You&lsquo;re signed up for the beta program. Click the button below to download the app:</p>
+            <p>Also don't worry we won't match your feedback to your name so be honest as possible it's important to us</p>
             <Button onClick={handleDownload} size="lg" className="bg-white text-purple-800 hover:bg-gray-100">
               Download Beta App <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
@@ -134,24 +188,31 @@ export const BetaProgramSection: React.FC = () => {
         );
       case 'feedback':
         return (
-          <form onSubmit={handleFeedback} className="space-y-4">
-            <Label htmlFor="feedback" className="text-left block">We&lsquo;d love to hear your thoughts:</Label>
-            <Textarea
-              id="feedback"
-              placeholder="Share your experience with the beta app..."
-              value={feedback}
-              onChange={(e) => setFeedback(e.target.value)}
-              className={cn(
-                "bg-white/20 border-none text-white placeholder:text-gray-300",
-                errors.feedback && "border-red-500 focus-visible:ring-red-500"
-              )}
-              rows={5}
-            />
-            {errors.feedback && <p className="text-red-500 text-sm mt-1 text-left">{errors.feedback}</p>}
-            <Button type="submit" size="lg" className="w-full bg-white text-purple-800 hover:bg-gray-100">
-              Submit Feedback <ChevronRight className="ml-2 h-4 w-4" />
-            </Button>
-          </form>
+          <>
+            {errorMessage && (
+              <div className='p-2 rounded bg-black flex items-center justify-center mb-3'>
+                <h3 className='text-red-700'>{errorMessage} !!</h3>
+              </div>
+            )}
+            <form onSubmit={handleFeedback} className="space-y-4">
+              <Label htmlFor="feedback" className="text-left block">We&lsquo;d love to hear your thoughts:</Label>
+              <Textarea
+                id="feedback"
+                placeholder="Share your experience with the beta app..."
+                value={feedback}
+                onChange={(e) => setFeedback(e.target.value)}
+                className={cn(
+                  "bg-white/20 border-none text-white placeholder:text-gray-300",
+                  errors.feedback && "border-red-500 focus-visible:ring-red-500"
+                )}
+                rows={5}
+              />
+              {errors.feedback && <p className="text-red-500 text-sm mt-1 text-left">{errors.feedback}</p>}
+              <Button type="submit" size="lg" className="w-full bg-white text-purple-800 hover:bg-gray-100">
+                Submit Feedback <ChevronRight className="ml-2 h-4 w-4" />
+              </Button>
+            </form>
+          </>
         );
       case 'complete':
         return (
