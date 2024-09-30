@@ -188,8 +188,12 @@ export const BetaProgramSection: React.FC = () => {
       case 'download':
         return (
           <div className="text-center">
-            <p className="mb-4">Great! You&lsquo;re signed up for the beta program. Click the button below to download the app:</p>
-            <p>Also don't worry we won't match your feedback to your name so be honest as possible it's important to us</p>
+            <p className="mb-4">
+              Great! You&lsquo;re signed up for the beta program. Click the button below to download the app:
+            </p>
+            <p>
+              Also don&apos;t worry we won&apos;t match your feedback to your name so be honest as possible it&apos;s important to us
+            </p>
             <Button onClick={handleDownload} size="lg" className="bg-white text-purple-800 hover:bg-gray-100">
               Download Beta App <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
