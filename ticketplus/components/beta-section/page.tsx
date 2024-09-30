@@ -14,8 +14,8 @@ type Role = 'attendee' | 'organizer';
 type Step = 'signup' | 'download' | 'feedback' | 'complete';
 
 const downloadLinks: Record<Role, string> = {
-  attendee: 'https://expo.dev/artifacts/eas/qsfLh6ou4DRPJ3fiGQ5exj.apk',
-  organizer: 'https://expo.dev/accounts/truthserum/projects/ticket-plus-organizers-client/builds/97179bd0-4e55-4bef-86e6-1bcc9f251c4f'
+  attendee: 'https://expo.dev/artifacts/eas/oPj838f7X7evfKWu5MSMiM.apk',
+  organizer: 'https://expo.dev/artifacts/eas/8sLeEkrUUQThzdyTD7VB61.apk'
 };
 
 export const BetaProgramSection: React.FC = () => {
