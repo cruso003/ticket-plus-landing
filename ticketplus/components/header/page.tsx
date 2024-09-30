@@ -9,7 +9,7 @@ export const Header = () => (
         className="dark:invert"
         src="/images/tplogo.png"
         alt="Tick8 Plus Logo"
-        width={150}
+        width={120}
         height={38}
         priority
       />
