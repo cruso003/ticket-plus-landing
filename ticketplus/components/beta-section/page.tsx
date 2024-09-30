@@ -191,7 +191,7 @@ export const BetaProgramSection: React.FC = () => {
             <p className="mb-4">
               Great! You&lsquo;re signed up for the beta program. Click the button below to download the app:
             </p>
-            <p>
+            <p className='font-bold'>
               Also don&apos;t worry we won&apos;t match your feedback to your name so be honest as possible it&apos;s important to us
             </p>
             <Button onClick={handleDownload} size="lg" className="bg-white text-purple-800 hover:bg-gray-100">
