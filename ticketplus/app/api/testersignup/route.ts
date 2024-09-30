@@ -7,8 +7,6 @@ export const POST = async (req: Request) => {
     const body = await req.json();
     const { name, email, role } = body;
 
-    console.log({ name, email, role });
-
     // Validate input
     if (!name || !email || !role) {
       return new Response(JSON.stringify({ message: 'All fields are required' }), { status: 400, headers: { 'Content-Type': 'application/json' } });

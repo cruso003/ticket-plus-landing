@@ -6,7 +6,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { CheckCircle2, ChevronRight } from 'lucide-react';
+import { CheckCircle2, ChevronRight, Dot } from 'lucide-react';
+import { Dots } from "react-activity";
+import "react-activity/dist/library.css";
 
 type Role = 'attendee' | 'organizer';
 type Step = 'signup' | 'download' | 'feedback' | 'complete';
@@ -19,6 +21,8 @@ const downloadLinks: Record<Role, string> = {
 export const BetaProgramSection: React.FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState<boolean>(false);
+
   const [role, setRole] = useState<Role | ''>('');
   const [feedback, setFeedback] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -42,7 +46,7 @@ export const BetaProgramSection: React.FC = () => {
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validateForm()) {
-
+      setLoading(true);
       try {
         const response = await fetch('/api/testersignup', {
           method: 'POST',
@@ -54,19 +58,18 @@ export const BetaProgramSection: React.FC = () => {
 
         if (!response.ok) {
           setErrorMessage('Failed to register for feedback');
-          return
+          return;
         }
-        setErrorMessage("")
+        setErrorMessage("");
         setCurrentStep('download');
       } catch (error) {
         console.error('Error submitting feedback:', error);
-        setErrorMessage('Failed to register for feedback please try again later');
-        throw new Error("Failed to register for feedback please try again later")
+        setErrorMessage('Failed to register for feedback, please try again later');
+      } finally {
+        setLoading(false); // Stop loading
       }
     }
-
   };
-
   const handleDownload = () => {
     if (role && role in downloadLinks) {
       window.open(downloadLinks[role], '_blank');
@@ -77,7 +80,7 @@ export const BetaProgramSection: React.FC = () => {
   const handleFeedback = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (feedback) {
-      // Here you would typically send the feedback to your server
+      setLoading(true); // Start loading
       try {
         const response = await fetch('/api/feedback', {
           method: 'POST',
@@ -89,17 +92,17 @@ export const BetaProgramSection: React.FC = () => {
 
         if (!response.ok) {
           setErrorMessage('Failed to send feedback');
-          return
+          return;
         }
-        setErrorMessage("")
+        setErrorMessage("");
         setCurrentStep('complete');
-        console.log('Feedback submitted:', feedback);
+        console.log('Feedback submitted');
       } catch (error) {
         console.error('Error submitting feedback:', error);
-        setErrorMessage('Failed to send feeback Please try again');
-        throw new Error("Failed to send feeback Please try again")
+        setErrorMessage('Failed to send feedback. Please try again.');
+      } finally {
+        setLoading(false);
       }
-
     } else {
       setErrors({ feedback: 'Please provide some feedback' });
     }
@@ -168,7 +171,13 @@ export const BetaProgramSection: React.FC = () => {
                 </div>
                 <div className="flex-1">
                   <Button type="submit" size="lg" className="w-full bg-white text-purple-800 hover:bg-gray-100">
-                    Sign Up for Beta <ChevronRight className="ml-2 h-4 w-4" />
+                    {loading ? (
+                      <Dots />
+                    ) : (
+                      <>
+                        Sign Up for Beta <ChevronRight className="ml-2 h-4 w-4" />
+                      </>
+                    )}
                   </Button>
                 </div>
               </div>
@@ -209,7 +218,13 @@ export const BetaProgramSection: React.FC = () => {
               />
               {errors.feedback && <p className="text-red-500 text-sm mt-1 text-left">{errors.feedback}</p>}
               <Button type="submit" size="lg" className="w-full bg-white text-purple-800 hover:bg-gray-100">
-                Submit Feedback <ChevronRight className="ml-2 h-4 w-4" />
+                {loading ? (
+                  <Dots />
+                ) : (
+                  <>
+                    Submit Feedback <ChevronRight className="ml-2 h-4 w-4" />
+                  </>
+                )}
               </Button>
             </form>
           </>
