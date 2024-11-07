@@ -7,6 +7,7 @@ import { Header } from "@/components/header/page";
 import ValuePropositionSection from "@/components/value-prop/page";
 import { HowItWorksSection } from "@/components/why-section/page";
 import AppDownloadSection from "./app-download-section/page";
+import React from "react";
 
 export default function Home() {
   return (
