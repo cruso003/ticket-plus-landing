@@ -20,8 +20,8 @@ type Role = "attendee" | "organizer";
 type Step = "signup" | "download" | "feedback" | "complete";
 
 const downloadLinks: Record<Role, string> = {
-  attendee: "https://expo.dev/artifacts/eas/eiZvpN9JWgXH8n2ADD3TZo.apk",
-  organizer: "https://expo.dev/artifacts/eas/n6pk63XwSyHSZ9bXdrkaKr.apk",
+  attendee: "https://expo.dev/artifacts/eas/usjM3QmR75mVekcE5eYDJM.apk",
+  organizer: "https://expo.dev/artifacts/eas/wPAn1LdK5xZW2Tp75muYyN.apk",
 };
 
 export const BetaProgramSection: React.FC = () => {
