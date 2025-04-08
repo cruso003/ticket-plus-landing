@@ -1,0 +1,1 @@
+export const TICKETPLUS_API_URL =  'https://app.tick8plus.com/api/v2';
