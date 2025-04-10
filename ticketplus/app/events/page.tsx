@@ -449,6 +449,18 @@ const EventsPage = () => {
               </div>
             </div>
           </div>
+
+          {/* Upcoming Events Section */}
+          {upcomingEvents.length > 0 && activeCategory === 'All' && activeStatus === 'All Status' && (
+            <div className="mt-16">
+              <h2 className="text-2xl font-bold text-white mb-6">Upcoming Events in {selectedCountry}</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {upcomingEvents.slice(0, 3).map(event => (
+                  <EventCard key={event._id} event={event} />
+                ))}
+              </div>
+            </div>
+          )}
           
           {/* Events Grid */}
           {isLoading ? (
@@ -471,18 +483,6 @@ const EventsPage = () => {
             <div className="text-center py-12 mt-8">
               <h3 className="text-xl text-gray-400">No events found with the selected filters</h3>
               <p className="text-gray-500 mt-2">Try changing your filters or check back later.</p>
-            </div>
-          )}
-          
-          {/* Upcoming Events Section */}
-          {upcomingEvents.length > 0 && activeCategory === 'All' && activeStatus === 'All Status' && (
-            <div className="mt-16">
-              <h2 className="text-2xl font-bold text-white mb-6">Upcoming Events in {selectedCountry}</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {upcomingEvents.slice(0, 3).map(event => (
-                  <EventCard key={event._id} event={event} />
-                ))}
-              </div>
             </div>
           )}
         </div>

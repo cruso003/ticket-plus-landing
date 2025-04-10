@@ -112,7 +112,7 @@ const MiniCartDrawer = ({ open, onClose }: MiniCartDrawerProps) => {
           <Button 
             variant="outline" 
             onClick={handleViewCart}
-            className="w-full border-gray-700 text-white hover:bg-gray-800 hover:text-white"
+            className="w-full border-gray-700 bg-slate-400 text-white hover:bg-gray-800 hover:text-white"
           >
             View Cart
           </Button>

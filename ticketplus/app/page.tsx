@@ -8,6 +8,7 @@ import ValuePropositionSection from "@/components/value-prop/page";
 import { HowItWorksSection } from "@/components/why-section/page";
 import AppDownloadSection from "./app-download-section/page";
 import React from "react";
+import TicketActionsSection from "@/components/ticket-actions/page";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
       <ValuePropositionSection />
       <HowItWorksSection />
       <FeaturesSection />
+      <TicketActionsSection />
       <FAQSection />
       <BetaProgramSection />
       <AppDownloadSection />

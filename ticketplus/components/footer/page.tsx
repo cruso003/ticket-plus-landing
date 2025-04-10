@@ -31,8 +31,8 @@ export const Footer = () => (
             </a>
           </li>
           <li>
-            <a href="#beta-program" className="text-gray-400 hover:text-white">
-              Beta Program
+            <a href="/tickets" className="text-gray-400 hover:text-white">
+              Find My Tickets
             </a>
           </li>
         </ul>
@@ -96,7 +96,7 @@ export const Footer = () => (
               href="mailto:info@tick8plus.com"
               className="text-gray-400 hover:text-white"
             >
-              tick8plus@gmail.com
+              info@tick8plus.com
             </a>
           </div>
         </div>
