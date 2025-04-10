@@ -33,7 +33,7 @@ import { toast } from "react-hot-toast";
 import axios from "axios";
 import { TICKETPLUS_API_URL } from "@/constants";
 import Image from "next/image";
-import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
+import { useFlutterwave, closePaymentModal} from "flutterwave-react-v3";
 import { loadStripe } from "@stripe/stripe-js";
 import {
   Elements,
@@ -48,6 +48,7 @@ import stripeIcon from "@/public/images/cards.jpg";
 import flutterwaveIcon from "@/public/images/rave.jpg";
 import momoIcon from "@/public/images/momo.jpg";
 import airtelMoneyIcon from "@/public/images/airtel.jpg";
+import { FlutterwaveConfig } from "flutterwave-react-v3/dist/types";
 
 // Initialize Stripe
 const stripePromise = loadStripe(
@@ -202,7 +203,7 @@ const StripePaymentForm = ({
       }
     } catch (error) {
       console.error("Stripe payment error:", error);
-      setError( "Payment failed");
+      setError("Payment failed");
       toast.error("Payment failed");
     } finally {
       setProcessing(false);
@@ -246,25 +247,6 @@ const CheckoutPage = () => {
   const [orderCompleted, setOrderCompleted] = useState(false);
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
   const [stripeClientSecret, setStripeClientSecret] = useState<string | null>(null);
-  interface FlutterwaveConfig {
-    public_key: string;
-    tx_ref: string;
-    amount: number;
-    currency: string;
-    payment_options: string;
-    customer: {
-      email: string;
-      phone_number: string;
-      name: string;
-    };
-    customizations: {
-      title: string;
-      description: string;
-      logo: string;
-    };
-    callback_url?: string;
-  }
-
   const [flutterwaveConfig, setFlutterwaveConfig] = useState<FlutterwaveConfig | null>(null);
 
   const [contactInfo, setContactInfo] = useState({
@@ -276,24 +258,19 @@ const CheckoutPage = () => {
 
   const [paymentMethod, setPaymentMethod] = useState<string>("");
 
-  // Initialize Flutterwave Hook with a default or empty config
-  const handleFlutterwave = useFlutterwave(flutterwaveConfig || {
+  // Default config to satisfy useFlutterwave requirements
+  const defaultFlutterwaveConfig: FlutterwaveConfig = {
     public_key: "",
     tx_ref: "",
     amount: 0,
     currency: "NGN",
     payment_options: "card,mobilemoney,ussd",
-    customer: {
-      email: "",
-      phone_number: "",
-      name: "",
-    },
-    customizations: {
-      title: "Ticket+",
-      description: "Payment for event tickets",
-      logo: "https://ticketplus.app/logo.png",
-    },
-  });
+    customer: { email: "", phone_number: "", name: "" },
+    customizations: { title: "", description: "", logo: "" },
+  };
+
+  // UseFlutterwave at top level
+  const handleFlutterwavePayment = useFlutterwave(flutterwaveConfig || defaultFlutterwaveConfig);
 
   const eventCountry = cart.length > 0 ? cart[0].country : "Nigeria";
 
@@ -312,6 +289,41 @@ const CheckoutPage = () => {
   const availablePaymentMethods =
     PAYMENT_METHODS[eventCountry as keyof typeof PAYMENT_METHODS] || PAYMENT_METHODS.default;
 
+  // Effect to trigger Flutterwave payment when config is set and processing
+  useEffect(() => {
+    if (flutterwaveConfig && isProcessing && paymentMethod === "flutterwave") {
+      handleFlutterwavePayment({
+        callback: async (response) => {
+          if (response.status === "successful" || response.status === "completed") {
+            try {
+              const verifyRes = await axios.post(
+                `${TICKETPLUS_API_URL}/payments/flutterwave/verify`,
+                { transaction_id: response.transaction_id, tx_ref: response.tx_ref }
+              );
+              if (verifyRes.data.success) {
+                const orderId = verifyRes.data.data?.orderId || response.transaction_id;
+                setOrderReference(orderId);
+                setCurrentStep(2);
+                setOrderCompleted(true);
+                clearCart();
+              } else {
+                toast.error("Payment verification failed.");
+              }
+            } catch (error) {
+              console.error("Flutterwave verification error:", error);
+              toast.error("Failed to verify payment.");
+            }
+          } else {
+            toast.error("Payment was not successful.");
+          }
+          closePaymentModal();
+          setIsProcessing(false);
+        },
+        onClose: () => setIsProcessing(false),
+      });
+    }
+  }, [flutterwaveConfig, isProcessing, paymentMethod, handleFlutterwavePayment, clearCart]);
+
   // Reset processing states when payment method changes
   const handlePaymentMethodChange = (methodId: string) => {
     setPaymentMethod(methodId);
@@ -319,7 +331,7 @@ const CheckoutPage = () => {
     setIsPaymentProcessing(false);
     setShowMomoModal(false);
     setStripeClientSecret(null);
-    setFlutterwaveConfig(null); // Reset Flutterwave config
+    setFlutterwaveConfig(null);
   };
 
   useEffect(() => {
@@ -399,7 +411,7 @@ const CheckoutPage = () => {
           setShowMomoModal(true);
           break;
         case "flutterwave":
-          await handleFlutterwavePayment();
+          await initializeFlutterwavePayment();
           break;
         case "stripe":
           await handleStripePayment();
@@ -410,6 +422,65 @@ const CheckoutPage = () => {
     } catch (error) {
       console.error("Checkout error:", error);
       toast.error("There was a problem processing your payment. Please try again.");
+      setIsProcessing(false);
+    }
+  };
+
+  const initializeFlutterwavePayment = async () => {
+    try {
+      const response = await axios.post(
+        `${TICKETPLUS_API_URL}/payments/flutterwave/initialize`,
+        {
+          amount: total,
+          email: contactInfo.email,
+          name: `${contactInfo.firstName} ${contactInfo.lastName}`,
+          phone: contactInfo.phone,
+          metadata: {
+            country: eventCountry,
+            currency: currencyCode,
+            orderDetails: {
+              tickets: cart.map((item) => ({
+                ticketId: item.ticketId,
+                ticketName: item.ticketName,
+                ticketPrice: item.salePrice,
+                owner: item.event.owner,
+                event: item.event._id,
+                eventName: item.event.name,
+                eventCategory: item.event.category,
+                quantity: item.qty,
+                totalAmount: item.salePrice * item.qty,
+                startingTime: item.event.startingTime,
+                endingTime: item.event.endingTime,
+                merchandise: item.merchandise,
+              })),
+              contactInfo: {
+                email: contactInfo.email,
+                phone: contactInfo.phone,
+                name: `${contactInfo.firstName} ${contactInfo.lastName}`,
+                country: eventCountry,
+              },
+              ...(coupon ? { coupon: { code: coupon.code } } : {}),
+            },
+          },
+        }
+      );
+      if (response.data.success) {
+        const config: FlutterwaveConfig = {
+          public_key: response.data.data.public_key,
+          tx_ref: response.data.data.tx_ref,
+          amount: total,
+          currency: response.data.data.currency,
+          payment_options: response.data.data.payment_options,
+          customer: response.data.data.customer,
+          customizations: response.data.data.customizations,
+        };
+        setFlutterwaveConfig(config); // This will trigger the useEffect to open the modal
+      } else {
+        throw new Error("Failed to initialize Flutterwave payment");
+      }
+    } catch (error) {
+      console.error("[Flutterwave] Error during initialization:", error);
+      toast.error("Failed to initialize Flutterwave payment");
       setIsProcessing(false);
     }
   };
@@ -524,93 +595,6 @@ const CheckoutPage = () => {
       }
     };
     await checkStatus();
-  };
-
-  const handleFlutterwavePayment = async () => {
-    try {
-      const response = await axios.post(
-        `${TICKETPLUS_API_URL}/payments/flutterwave/initialize`,
-        {
-          amount: total,
-          email: contactInfo.email,
-          name: `${contactInfo.firstName} ${contactInfo.lastName}`,
-          phone: contactInfo.phone,
-          metadata: {
-            country: eventCountry,
-            currency: currencyCode,
-            orderDetails: {
-              tickets: cart.map((item) => ({
-                ticketId: item.ticketId,
-                ticketName: item.ticketName,
-                ticketPrice: item.salePrice,
-                owner: item.event.owner,
-                event: item.event._id,
-                eventName: item.event.name,
-                eventCategory: item.event.category,
-                quantity: item.qty,
-                totalAmount: item.salePrice * item.qty,
-                startingTime: item.event.startingTime,
-                endingTime: item.event.endingTime,
-                merchandise: item.merchandise,
-              })),
-              contactInfo: {
-                email: contactInfo.email,
-                phone: contactInfo.phone,
-                name: `${contactInfo.firstName} ${contactInfo.lastName}`,
-                country: eventCountry,
-              },
-              ...(coupon ? { coupon: { code: coupon.code } } : {}),
-            },
-          },
-        }
-      );
-      if (response.data.success) {
-        const config = {
-          public_key: response.data.data.public_key,
-          tx_ref: response.data.data.tx_ref,
-          amount: total,
-          currency: response.data.data.currency,
-          payment_options: response.data.data.payment_options,
-          customer: response.data.data.customer,
-          customizations: response.data.data.customizations,
-          callback_url: window.location.origin + "/checkout/success",
-        };
-        setFlutterwaveConfig(config); // Update config state
-
-        // Trigger Flutterwave payment
-        handleFlutterwave({
-          callback: async (response) => {
-            if (response.status === "successful" || response.status === "completed") {
-              const verifyRes = await axios.post(
-                `${TICKETPLUS_API_URL}/payments/flutterwave/verify`,
-                { transaction_id: response.transaction_id, tx_ref: response.tx_ref }
-              );
-              if (verifyRes.data.success) {
-                const orderId = verifyRes.data.data?.orderId || response.transaction_id;
-                setOrderReference(orderId);
-                setCurrentStep(2);
-                setOrderCompleted(true);
-                clearCart();
-              } else {
-                toast.error("Payment verification failed.");
-              }
-            } else {
-              toast.error("Payment was not successful.");
-            }
-            closePaymentModal();
-            setIsProcessing(false);
-          },
-          onClose: () => {
-            setIsProcessing(false);
-            setFlutterwaveConfig(null); // Reset config after closing
-          },
-        });
-      }
-    } catch (error) {
-      console.error("[Flutterwave] Error during payment:", error);
-      toast.error("Failed to initialize Flutterwave payment");
-      setIsProcessing(false);
-    }
   };
 
   const handleStripePayment = async () => {
