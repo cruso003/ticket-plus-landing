@@ -121,8 +121,8 @@ const TermsOfServiceScreen = () => {
           </p>
           <ul className="list-disc pl-6 mb-4">
             <li>
-              Send an email to support@bits-innovate.com with the subject "Account
-              Deletion Request"
+              Send an email to support@bits-innovate.com with the subject &lquot;Account
+              Deletion Request&rquot;
             </li>
             <li>
               Include your full name and the email address associated with your
