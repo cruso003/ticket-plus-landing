@@ -93,10 +93,10 @@ export const Footer = () => (
           <div className="flex items-center">
             <FaEnvelope size={18} className="mr-2" />
             <a
-              href="mailto:info@tick8plus.com"
+              href="mailto:info@bits-innovate.com"
               className="text-gray-400 hover:text-white"
             >
-              info@tick8plus.com
+              info@bits-innovate.com
             </a>
           </div>
         </div>

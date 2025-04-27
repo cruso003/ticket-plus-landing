@@ -44,7 +44,7 @@ const PrivacyPolicyScreen = () => {
 
           <h3 className="text-xl font-semibold text-purple-700 mt-6 mb-3">4. Contact Us</h3>
           <p className="mb-2">If you have any questions or concerns about our Privacy Policy, please contact us at:</p>
-          <p className="mb-1"><strong>Email:</strong> tick8plus@gmail.com</p>
+          <p className="mb-1"><strong>Email:</strong> info@bits-innovate.com</p>
           <p className="mb-1"><strong>Phone:</strong> +231 (881) 158-457</p>
           <p className="mb-4"><strong>Address:</strong> Duport Road Junction, Paynesville City, Liberia</p>
 

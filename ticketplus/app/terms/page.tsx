@@ -4,11 +4,15 @@ import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const TermsOfServiceScreen = () => {
-    const router = useRouter();
+  const router = useRouter();
   return (
     <div className="bg-purple-50 min-h-screen">
       <header className="bg-gradient-to-br from-purple-900 via-black to-pink-900 text-white p-4 flex items-center">
-        <button className="mr-4" aria-label="Go back" onClick={() => router.push('/')}>
+        <button
+          className="mr-4"
+          aria-label="Go back"
+          onClick={() => router.push("/")}
+        >
           <ArrowLeft size={24} />
         </button>
         <h1 className="text-2xl font-bold">Terms of Service</h1>
@@ -109,14 +113,40 @@ const TermsOfServiceScreen = () => {
           </p>
 
           <h3 className="text-xl font-semibold text-purple-700 mt-6 mb-3">
-            7. Contact Us
+            7. Account Deletion
+          </h3>
+          <p className="mb-4">
+            You have the right to request deletion of your account and personal
+            data. To request account deletion:
+          </p>
+          <ul className="list-disc pl-6 mb-4">
+            <li>
+              Send an email to support@bits-innovate.com with the subject "Account
+              Deletion Request"
+            </li>
+            <li>
+              Include your full name and the email address associated with your
+              account
+            </li>
+            <li>
+              We will process your request within 30 days and notify you once
+              completed
+            </li>
+          </ul>
+          <p className="mb-4">
+            Please note that certain information may be retained for legal,
+            business, or technical purposes even after account deletion.
+          </p>
+
+          <h3 className="text-xl font-semibold text-purple-700 mt-6 mb-3">
+            8. Contact Us
           </h3>
           <p className="mb-2">
             If you have any questions or concerns about our Terms of Service,
             please contact us at:
           </p>
           <p className="mb-1">
-            <strong>Email:</strong> tick8plus@gmail.com
+            <strong>Email:</strong> support@bits-innovate.com
           </p>
           <p className="mb-1">
             <strong>Phone:</strong> +231 (881) 158-457
